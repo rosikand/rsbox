@@ -32,3 +32,9 @@ The modules are located in `src/rsbox/`
 ### `0.0.1`
 
 - Initial module upload. Contains `ml_utils.py`. 
+
+## To-do 
+
+- Add `get_timestr()`
+- Add `auto_backup()` 
+
