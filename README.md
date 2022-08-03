@@ -34,7 +34,7 @@ The modules are located in `src/rsbox/`
 - Initial module upload. Contains `ml_utils.py`. 
 
 ## To-do 
-
+- Make `image_dataset_from_folders` function 
 - Add `get_timestr()`
 - Add `auto_backup()` (see gist [here](https://gist.github.com/rosikand/30160ac682ea2e15baa275b79333f81a))
 
