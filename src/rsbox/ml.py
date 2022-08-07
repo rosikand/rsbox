@@ -1,5 +1,5 @@
 """
-File: ml_utils.py 
+File: ml.py 
 -------------- 
 Contains useful functions that I may import while programming 
 machine learning projects.  
@@ -7,6 +7,7 @@ machine learning projects.
 
 from matplotlib import pyplot as plt
 from PIL import Image
+import torch 
 import numpy as np 
 from glob import glob
 import random

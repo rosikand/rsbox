@@ -21,6 +21,10 @@ The modules are located in `src/rsbox/`
 
 ## Version changelog 
 
+### `0.0.4`
+
+- Changed `ml_utils.py` to `ml.py` for ease-of-use. 
+
 ### `0.0.3`
 
 - Added more documentation.  
@@ -32,3 +36,8 @@ The modules are located in `src/rsbox/`
 ### `0.0.1`
 
 - Initial module upload. Contains `ml_utils.py`. 
+
+
+## To-do 
+
+
