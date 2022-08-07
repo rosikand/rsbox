@@ -16,10 +16,17 @@ $ pip install rsbox
 
 The modules are located in `src/rsbox/`
 
-- `ml_utils.py`: machine learning programming utilities. 
+- `ml.py`: machine learning programming utilities. 
+- `misc.py`: misc. utilities. 
 
 
 ## Version changelog 
+
+### `0.0.5`
+
+- Improved documentation. 
+- Added `plot` function in `ml.py` and removed redundant `plot_tensor` function. `plot_np_img` was kept for longevity purposes. 
+- Added `misc.timestamp`, `misc.pickle` and `misc.unpickle`. 
 
 ### `0.0.4`
 
@@ -36,8 +43,3 @@ The modules are located in `src/rsbox/`
 ### `0.0.1`
 
 - Initial module upload. Contains `ml_utils.py`. 
-
-
-## To-do 
-
-

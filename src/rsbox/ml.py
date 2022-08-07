@@ -30,6 +30,7 @@ def plot_png(file_path, color):
 
 def plot_np_img(image_array, color):
 	"""
+    (Here for longevity purposes... use plot instead)
 	Plots a numpy array using matplotlib. Color is a bool value. If true, 
 	image will be displayed in color. Else, it will be displayed in 
 	greyscale.
@@ -45,17 +46,28 @@ def plot_np_img(image_array, color):
 		plt.show()
 
 
-def plot_tensor(input_tensor, color):
+def plot(image_array, color=True):
     """
-    Plots the PyTorch tensor input_tensor
-    with the corresponding color map. 
+    Plots a numpy array using matplotlib. Color is a bool value which
+    is true by default. If passed in as False, image will be displayed in 
+    greyscale. 
 
-    input: input_tensor must be of size (1, H, W) or (H, W) for greyscale
-    and (3, H, W) for color. 
+    input: image_array must be of shape (1, H, W) or (H, W, 1) or (H, W) for greyscale
+    and (3, H, W) or (H, W, 3) for color. 
     """
-    input_tensor = torch.squeeze(input_tensor)
-    np_arr = input_tensor.numpy()
-    plot_numpy_img(np_arr, color)
+
+    # move to numpy is not already in numpy array format 
+    image_array = np.array(image_array)
+    image_array = np.squeeze(image_array)
+
+    if color == True:
+        if image_array.shape[0] == 3:
+            image_array = np.moveaxis(image_array, 0, -1)
+        plt.imshow(image_array, interpolation='nearest')
+        plt.show()
+    else:
+        plt.imshow(image_array, interpolation='nearest', cmap='Greys_r')
+        plt.show()
 
 
 def image_dir_to_data(dirpath, extension):
