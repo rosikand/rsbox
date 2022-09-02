@@ -7,10 +7,12 @@ machine learning projects.
 
 from matplotlib import pyplot as plt
 from PIL import Image
+import requests
 import torch 
 import numpy as np 
 from glob import glob
 import random
+import torchvision.transforms as T
 
 
 def plot_png(file_path, color):
@@ -134,3 +136,102 @@ def gen_distro(master_list):
         generated_distro = generated_distro + class_list
     random.shuffle(generated_distro)
     return generated_distro
+
+
+def get_img(url='https://stanford.edu/~rsikand/assets/images/seal.png', resize=True, size=(128, 128)):
+    """
+    Returns a sample numpy image to play with. 
+    Arguments:
+    -----------
+    - url: Can pass in custom url if you want a different image. 
+    Defaults to a baby seal!  
+    - resize: by default, all images are resized to 128x128. If you'd
+    like to keep the default size, specify False. 
+    - size: size to resize to. Default is 128x128. 
+    """
+
+    image = np.array(Image.open(requests.get(url, stream=True).raw))
+
+
+    if resize:
+        if len(image.shape) == 3:
+            image = np.array(T.Resize(size=size)(torch.movedim(torch.tensor(image), -1, 0)))
+        else:
+            image = np.array(T.Resize(size=size)(torch.tensor(image)))
+    else:
+        if len(image.shape) == 3:
+            if image.shape[0] != 3 and image.shape[2] == 3:
+                image = np.moveaxis(image, -1, 0)
+            elif image.shape[0] != 1 and image.shape[2] == 1:
+                image = np.moveaxis(image, -1, 0)
+            else:
+                image = image
+        else:
+            image = image
+
+    return image
+
+
+def img_dataset_from_dir(dir_path):
+    """
+    Given a directory containing folders
+    representing classes of images, this
+    functions builds a valid numpy
+    dataset distribution. 
+    Input (dir_path) structure: 
+    dir_path/class_1, class_n/1.png 
+    Note: 'dir_path' must be the raw
+    dir name (no trailing dash) 
+    Output: [(x,y), ..., (x,y)]
+    """
+
+    dir_path = dir_path + "/*/"
+    class_list = glob(dir_path, recursive = True)
+    
+    master_list = []
+    idx = 0
+    for class_ in class_list:
+        curr_class = image_dir_to_data_norm(class_, "png")
+        new_arrays = []
+        for elem in curr_class:
+            if len(elem.shape) == 2:
+                elem = np.expand_dims(elem, axis=0)
+            assert len(elem.shape) == 3
+            if elem.shape[0] != 3 and elem.shape[2] == 3:
+                elem = np.moveaxis(elem, -1, 0)
+            elif elem.shape[0] != 1 and elem.shape[2] == 1:
+                elem = np.moveaxis(elem, -1, 0)
+            new_arrays.append(elem)
+
+        labeled_list = gen_label_pair(new_arrays, idx)
+        master_list.append(labeled_list)
+        idx += 1
+
+    return gen_distro(master_list)
+
+
+def print_model_size(net):
+    """
+    Function that calculates PyTorch model size. 
+    Returns and prints. 
+    Returns (num params, model size in MB). 
+    """
+    # taken from 
+    # https://stackoverflow.com/questions/49201236/check-the-total-number-of-parameters-in-a-pytorch-model
+    total_params = sum(p.numel() for p in net.parameters())
+    
+    # taken from 
+    # https://discuss.pytorch.org/t/finding-model-size/130275/2 
+    param_size = 0
+    for param in net.parameters():
+        param_size += param.nelement() * param.element_size()
+    buffer_size = 0
+    for buffer in net.buffers():
+        buffer_size += buffer.nelement() * buffer.element_size()
+
+    size_all_mb = (param_size + buffer_size) / 1024**2
+    
+    print("Total number of parameters: ", total_params)
+    print("model size (bytes): ", (param_size + buffer_size))
+    print('model size (mb): {:.3f}MB'.format(size_all_mb))
+    
