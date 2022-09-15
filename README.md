@@ -22,6 +22,10 @@ The modules are located in `src/rsbox/`
 
 ## Version changelog 
 
+### `0.0.7`
+
+- Fixed bug in `misc.timestamp`
+
 ### `0.0.6`
 - Added `print_model_size`, `img_dataset_from_dir`, `get_img` functions. 
 
