@@ -14,8 +14,7 @@ def timestamp():
     Simple function that retrieves the current date and time
     and returns a properly formatted string (i.e., a timestamp).  
     """
-    cal_time = timezone('America/Los_Angeles')
-    now = datetime.now(cal_time)
+    now = datetime.now()
     date_time = now.strftime("%-I-%M-%p-%b-%d-%Y")
     return str(date_time)
 
