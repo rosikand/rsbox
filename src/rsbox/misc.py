@@ -39,4 +39,3 @@ def unpickle(filepath):
 	in_file = open(filepath, 'rb')
 	loaded_object = pickle.load(in_file) 
 	return loaded_object
-

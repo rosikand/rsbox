@@ -212,9 +212,8 @@ def img_dataset_from_dir(dir_path):
 
 def print_model_size(net):
     """
-    Function that calculates PyTorch model size. 
-    Returns and prints. 
-    Returns (num params, model size in MB). 
+    Function that calculates PyTorch model size
+    and prints it out in mb, bytes, and num params.  
     """
     # taken from 
     # https://stackoverflow.com/questions/49201236/check-the-total-number-of-parameters-in-a-pytorch-model
