@@ -4,7 +4,13 @@
 
 A toolbox of utility functions [I](http://rosikand.github.io/) commonly use when programming in Python. Includes mostly machine learning utilities. 
 
-The full API consists of importable functions from modules located in `src/rsbox/`. Functions are documented via docstrings under the function header. An HTML front-end documentation for the API is available [here](https://rosikand.github.io/rsbox/). 
+The full API consists of importable functions from modules located in `src/rsbox/`. Functions are documented via docstrings under the function header. An HTML front-end documentation for the API is available [here](https://rosikand.github.io/rsbox/).
+
+## Installation 
+
+```
+$ pip install rsbox
+```
 
 ## Examples 
 
@@ -21,15 +27,11 @@ img_np_array = ml.get_img(url='https://stanford.edu/~rsikand/assets/images/seal.
 ml.plot(img_np_array)
 ```
 
-<img width="100" alt="image" src="https://user-images.githubusercontent.com/57341225/190890819-6b4a5266-2f21-4703-a70e-e18358f5c247.png">
+<img width="200" alt="image" src="https://user-images.githubusercontent.com/57341225/190890819-6b4a5266-2f21-4703-a70e-e18358f5c247.png">
 
 
 
-## Installation 
 
-```
-$ pip install rsbox
-```
 
 ## Modules 
 
