@@ -233,4 +233,25 @@ def print_model_size(net):
     print("Total number of parameters: ", total_params)
     print("model size (bytes): ", (param_size + buffer_size))
     print('model size (mb): {:.3f}MB'.format(size_all_mb))
+
+
+class MeanMetric:
+  """
+  Scalar metric designed to use on a per-epoch basis 
+  and updated on per-batch basis. For getting average across
+  the epoch. 
+  """
+
+  def __init__(self):
+    self.vals = []
+
+  def update(self, new_val):
+    self.vals.append(new_val)
+
+  def reset(self):
+    self.vals = []
+
+  def get(self):
+    mean_value = sum(self.vals)/len(self.vals)
+    return mean_value
     
