@@ -7,6 +7,9 @@ Miscellaneous utils.
 import pickle
 from datetime import datetime
 from pytz import timezone
+import requests
+import cloudpickle as cp
+from urllib.request import urlopen
 
 
 def timestamp():
@@ -39,3 +42,16 @@ def unpickle(filepath):
 	in_file = open(filepath, 'rb')
 	loaded_object = pickle.load(in_file) 
 	return loaded_object
+
+
+def load_dataset(urlpath=None):
+	"""
+	Given a url to a .pkl dataset file,
+	loads and returns the dataset object. 
+	"""
+	if urlpath is None:
+		urlpath = r"https://stanford.edu/~rsikand/assets/datasets/mini_cifar.pkl"
+	
+	dataset = cp.load(urlopen(urlpath)) 
+	return dataset
+
