@@ -1,6 +1,11 @@
 ## Version changelog 
 
 
+### `0.0.10`
+
+- Added `ml.numpy_collate` 
+
+
 ### `0.0.9`
 
 - Added `misc.load_dataset`

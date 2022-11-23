@@ -255,3 +255,22 @@ class MeanMetric:
     mean_value = sum(self.vals)/len(self.vals)
     return mean_value
     
+
+
+def numpy_collate(batch):
+    """batch collate function but keep as numpy array instead 
+    of converting to torch tensor like pytorch default does. inputs
+    must be np.arrays 
+    https://github.com/pytorch/pytorch/blob/35c8f93fd238d42aaea8fd6e730c3da9e18257cc/torch/utils/data/dataloader.py#L218
+    """
+
+    r_tuple = []
+
+    for i in range(len(batch[0])):
+        arrays_to_stack = []
+        for j in range(len(batch)):
+            arrays_to_stack.append(batch[j][i])
+        stacked = np.stack(arrays_to_stack, axis=0)
+        r_tuple.append(stacked)
+    
+    return tuple(r_tuple)
