@@ -1,5 +1,9 @@
 ## Version changelog 
 
+### `0.0.11`
+
+- Added `ml.load_image` 
+
 
 ### `0.0.10`
 

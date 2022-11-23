@@ -274,3 +274,40 @@ def numpy_collate(batch):
         r_tuple.append(stacked)
     
     return tuple(r_tuple)
+
+
+def load_image(img_path, resize=None, normalize=True):
+    """
+    Loads an image file into a numpy array in (C, H, W) form. 
+    Arguments:
+    -----------
+    - img_path (str): image filename (relative) 
+    - resize (tuple): (x, y) size to resize to. If None, won't resize. Default = None. 
+    - normalize: if True, divide by 255. 
+    Returns:
+    -----------
+    - image_array: loaded numpy array of the image file     
+    """
+    
+    x = Image.open(img_path)
+    image_array = np.array(x)
+
+    if normalize:
+        image_array = image_array / 255.0
+
+    if len(image_array.shape) == 2:
+        image_array = np.expand_dims(image_array, axis=0)
+    
+    assert len(image_array.shape) == 3
+
+    # switch dim 
+    if (image_array.shape[0] != 3 and image_array.shape[2] == 3) or (image_array.shape[0] != 1 and image_array.shape[2] == 1):
+        image_array = np.moveaxis(image_array, -1, 0)
+
+    assert image_array.shape[0] == 3 or image_array.shape[0] == 1
+
+    # resize 
+    if resize is not None:
+        image_array = np.array(T.Resize(size=resize)(torch.tensor(image_array)))
+
+    return image_array
