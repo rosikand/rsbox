@@ -1,5 +1,10 @@
 ## Version changelog 
 
+### `0.0.12`
+
+- Added `ml.classification_dataset`, `ml.img_dir_to_data`
+- Legacy versions of the new functions are kept in tact for backwards compatability. 
+
 ### `0.0.11`
 
 - Added `ml.load_image` 

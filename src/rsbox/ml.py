@@ -311,3 +311,77 @@ def load_image(img_path, resize=None, normalize=True):
         image_array = np.array(T.Resize(size=resize)(torch.tensor(image_array)))
 
     return image_array
+
+
+# v2 functions 
+
+def img_dir_to_data(dirpath, resize=None, normalize=True, extension=None):
+    """
+    (New version of image_dir_to_data). 
+    Takes in a directory containing images
+    and returns a list of numpy arrays representing
+    those images. 
+    Args:
+        - dirpath: path to directory 
+        - extension: include only files with this extension. Default = None. 
+        - resize: tuple of (h, w) for what to resize the images to. If None, won't resize. Default = None. 
+        - normalize: if True, divide by 255. 
+    """
+    data_subset = []
+    if extension is not None:
+        dirpath = dirpath + "/*." + extension
+    else:
+        dirpath = dirpath + "/*"
+    sub_set = glob(dirpath)
+
+    for elem in sub_set:
+        image = load_image(elem, resize=resize, normalize=normalize)
+        data_subset.append(image)
+
+    return data_subset  
+
+
+
+def classification_dataset(dir_path, resize=None, normalize=True, extension=None):
+    """
+    (New version of img_dataset_from_dir).  
+    Given a directory containing folders
+    representing classes of images, this
+    functions builds a valid numpy
+    dataset distribution. 
+    Input (dir_path) structure: 
+    dir_path/class_1, class_n/1.png 
+    Note: 'dir_path' must be the raw
+    dir name (no trailing dash) 
+    Output: [(x,y), ..., (x,y)]
+    Arguments:
+    - dir_path (str): path to the directory containing the class folders. 
+    - resize: tuple of (h, w) for what to resize the images to. If None, won't resize. Default = None. 
+    - normalize: if True, divide by 255. Default = True. 
+    - extension: include only files with this extension. Default = None. 
+    """
+
+    dir_path = dir_path + "/*/"
+    class_list = glob(dir_path, recursive = True)
+    
+    master_list = []
+    idx = 0
+    for class_ in class_list:
+        curr_class = img_dir_to_data(class_, resize, normalize, extension)
+        new_arrays = []
+        for elem in curr_class:
+            if len(elem.shape) == 2:
+                elem = np.expand_dims(elem, axis=0)
+            assert len(elem.shape) == 3
+            if elem.shape[0] != 3 and elem.shape[2] == 3:
+                elem = np.moveaxis(elem, -1, 0)
+            elif elem.shape[0] != 1 and elem.shape[2] == 1:
+                elem = np.moveaxis(elem, -1, 0)
+            new_arrays.append(elem)
+
+        labeled_list = gen_label_pair(new_arrays, idx)
+        master_list.append(labeled_list)
+        idx += 1
+
+    return gen_distro(master_list)
+
