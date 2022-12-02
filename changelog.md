@@ -1,5 +1,9 @@
 ## Version changelog 
 
+### `0.0.13`
+
+- Fixed bugs and added features in/to `ml.load_image`,  `ml.classification_dataset`. 
+
 ### `0.0.12`
 
 - Added `ml.classification_dataset`, `ml.img_dir_to_data`

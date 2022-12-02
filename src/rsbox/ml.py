@@ -11,6 +11,7 @@ import requests
 import torch 
 import numpy as np 
 from glob import glob
+from tqdm.auto import tqdm
 import random
 import torchvision.transforms as T
 
@@ -292,9 +293,22 @@ def load_image(img_path, resize=None, normalize=True):
     x = Image.open(img_path)
     image_array = np.array(x)
 
+    # remove transparency dimension if it exists 
+    if image_array.shape[-1] == 4 and len(image_array.shape) == 3:
+        image_array = image_array[:, :, :3]
+    elif image_array.shape[0] == 4 and len(image_array.shape) == 3:
+        image_array = image_array[:3, :, :]
+    
+    # if image has only 2 channels, add a third channel
+    if len(image_array.shape) == 3 and image_array.shape[-1] == 2:
+        image_array = np.concatenate([np.expand_dims(image_array[:, :, -1], axis=-1), image_array], axis=-1)
+    elif len(image_array.shape) == 3 and image_array.shape[0] == 2:
+        image_array = np.concatenate([np.expand_dims(image_array[-1, :, :], axis=0), image_array], axis=0)
+
     if normalize:
         image_array = image_array / 255.0
 
+    # if image is grayscale, add a channel dimension
     if len(image_array.shape) == 2:
         image_array = np.expand_dims(image_array, axis=0)
     
@@ -311,6 +325,7 @@ def load_image(img_path, resize=None, normalize=True):
         image_array = np.array(T.Resize(size=resize)(torch.tensor(image_array)))
 
     return image_array
+
 
 
 # v2 functions 
@@ -366,7 +381,11 @@ def classification_dataset(dir_path, resize=None, normalize=True, extension=None
     
     master_list = []
     idx = 0
-    for class_ in class_list:
+    tqdm_class_idx = 1
+    tqdm_class_list = tqdm(class_list)
+    for class_ in tqdm_class_list:
+        tqdm_class_list.set_description(f"Loading class {tqdm_class_idx}")
+        tqdm_class_idx += 1
         curr_class = img_dir_to_data(class_, resize, normalize, extension)
         new_arrays = []
         for elem in curr_class:
@@ -384,4 +403,3 @@ def classification_dataset(dir_path, resize=None, normalize=True, extension=None
         idx += 1
 
     return gen_distro(master_list)
-
