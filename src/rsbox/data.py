@@ -5,7 +5,7 @@ Utility functions for data processing for machine learning projects.
 """ 
 
 import boto3
-import ml
+from rsbox import ml
 import imageio
 import io
 import torch
